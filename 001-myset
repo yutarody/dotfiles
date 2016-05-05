@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 #myset
+#eval
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --audio_unit_plugindir=/Library/Audio/Plug-Ins/Components --vst_plugindir=/Library/Audio/Plug-Ins/VST"
@@ -9,7 +10,10 @@ export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+
+#env
 eval "$(pyenv init -)"
+eval "$(rbenv init -)"
 
 #ailas
 alias top='top -u'
