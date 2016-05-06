@@ -15,12 +15,6 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(rbenv init -)"
 
-#ailas
-alias top='top -u'
-alias brew-cask-clean-outdated='for c in /opt/homebrew-cask/Caskroom/*; do vl=(`ls -t $c`) && for v in "${vl[@]:1}"; do rm -rf "$c/$v"; done; done'
-alias brew-cask-update='for c in `brew cask list`; do ! brew cask info $c | grep -qF "Not installed" || brew cask install $c; done && brew-cask-clean-outdated'
-alias generate-cask-token='$(brew --repository)/Library/Taps/caskroom/homebrew-cask/developer/bin/generate_cask_token'
-
 #Brewfile オリジナルのbrewコマンドを使った後に 自動でBrewfileをアップデートするようにする
 if [ -f $(brew --prefix)/etc/brew-wrap ];then
   source $(brew --prefix)/etc/brew-wrap
@@ -54,3 +48,34 @@ curl-with-token() {
    "$LOGIN_URL"
    curl -L -b login_cookie.txt "$FIlE_URL$FILE_NAME"
 }
+
+docker-demon-start() {
+  eval "$(docker-machine env $1)"
+}
+
+docker-login() {
+  docker exec -it $1 /bin/bash
+}
+
+brew-cask-token-create() {
+  filename=`"$(brew --repository)/Library/Taps/caskroom/homebrew-cask/developer/bin/generate_cask_token" $1  | grep rb | awk '{print $4}'`
+  #echo $filepath
+  brew cask create $filename
+  mv "$(brew --repository)/Library/Taps/caskroom/homebrew-cask/casks/$filename" "$2"
+}
+
+brew-cask-pr() {
+  brew cask style --fix $1
+  brew cask audit --download $1
+  brew cask install $1
+  brew cask uninstall $1
+  echo 'cask check complite'
+}
+
+#ailas
+alias top='top -u'
+alias brew-cask-clean-outdated='for c in /opt/homebrew-cask/Caskroom/*; do vl=(`ls -t $c`) && for v in "${vl[@]:1}"; do rm -rf "$c/$v"; done; done'
+alias brew-cask-update='for c in `brew cask list`; do ! brew cask info $c | grep -qF "Not installed" || brew cask install $c; done && brew-cask-clean-outdated'
+alias generate-cask-token='$(brew --repository)/Library/Taps/caskroom/homebrew-cask/developer/bin/generate_cask_token'
+alias dockerd='docker-demon-start default'
+alias dloginweb='docker-login webserver'
