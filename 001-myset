@@ -27,10 +27,10 @@ function pecd {
         cd "$dir"
     fi
 }
-brew-outdated-update (){
-  brew unlink `brew outdated`
-  brew install `brew outdated`
-}
+#brew-outdated-update (){
+#  brew unlink `brew outdated`
+#  brew install `brew outdated`
+#}
 
 curl-with-token() {
   EMAIL_ADRESS=$1
@@ -74,8 +74,9 @@ brew-cask-pr() {
 
 #ailas
 alias top='top -u'
-alias brew-cask-clean-outdated='for c in /opt/homebrew-cask/Caskroom/*; do vl=(`ls -t $c`) && for v in "${vl[@]:1}"; do rm -rf "$c/$v"; done; done'
-alias brew-cask-update='for c in `brew cask list`; do ! brew cask info $c | grep -qF "Not installed" || brew cask install $c; done && brew-cask-clean-outdated'
+#alias brew-cask-clean-outdated='for c in /opt/homebrew-cask/Caskroom/*; do vl=(`ls -t $c`) && for v in "${vl[@]:1}"; do rm -rf "$c/$v"; done; done'
+#alias brew-cask-update='for c in `brew cask list`; do ! brew cask info $c | grep -qF "Not installed" || brew cask install $c; done && brew-cask-clean-outdated'
+alias brew-cask-upgrade='brew file cask_upgrade -C'
 alias generate-cask-token='$(brew --repository)/Library/Taps/caskroom/homebrew-cask/developer/bin/generate_cask_token'
 alias dockerd='docker-demon-start default'
 alias dloginweb='docker-login webserver'
