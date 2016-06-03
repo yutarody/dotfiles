@@ -11,6 +11,8 @@ export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 
+export PATH="/usr/local/Library/Taps/caskroom/homebrew-cask/developer/bin:$PATH"
+
 #env
 eval "$(pyenv init -)"
 eval "$(rbenv init -)"
@@ -131,6 +133,7 @@ function pecd {
         cd "$dir"
     fi
 }
+
 #brew-outdated-update (){
 #  brew unlink `brew outdated`
 #  brew install `brew outdated`
@@ -167,6 +170,9 @@ brew-cask-token-create() {
   brew cask create $filename
   mv "$(brew --repository)/Library/Taps/caskroom/homebrew-cask/casks/$filename" "$2"
 }
+ brew-cask-shasum() {
+   shasum -a 256 $1 | cut -d " " -f 1 | pbcopy
+ }
 
 brew-cask-pr() {
   brew cask style --fix $1
