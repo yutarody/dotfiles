@@ -4,7 +4,7 @@
 #eval
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
-export HOMEBREW_CASK_OPTS="--verbose --appdir=/Applications --audio_unit_plugindir=/Library/Audio/Plug-Ins/Components --vst_plugindir=/Library/Audio/Plug-Ins/VST"
+export HOMEBREW_CASK_OPTS="--audio_unit_plugindir=/Library/Audio/Plug-Ins/Components --vst_plugindir=/Library/Audio/Plug-Ins/VST"
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 
@@ -164,22 +164,29 @@ docker-login() {
   docker exec -it $1 /bin/bash
 }
 
-brew-cask-token-create() {
+cask-token-create() {
   filename=`"$(brew --repository)/Library/Taps/caskroom/homebrew-cask/developer/bin/generate_cask_token" $1  | grep rb | awk '{print $4}'`
   #echo $filepath
   brew cask create $filename
   mv "$(brew --repository)/Library/Taps/caskroom/homebrew-cask/casks/$filename" "$2"
 }
- brew-cask-shasum() {
+cask-shasum() {
    shasum -a 256 $1 | cut -d " " -f 1 | pbcopy
  }
 
-brew-cask-pr() {
+cask-pr() {
   brew cask style --fix $1
   brew cask audit --download $1
-  brew cask install $1
-  brew cask uninstall $1
-  echo 'cask check complite'
+
+  echo 'New Cask?'
+  read str
+  if [ str == 'y' ]; then
+    #statements
+    brew cask install $1
+    brew cask uninstall $1
+  fi
+
+  echo 'cask check complete'
 }
 
 #ailas
@@ -191,6 +198,7 @@ alias brew-upgrade-list='for c in `brew cask list`; do ! brew cask info $c | gre
 alias generate-cask-token='$(brew --repository)/Library/Taps/caskroom/homebrew-cask/developer/bin/generate_cask_token'
 alias dockerd='docker-demon-start default'
 alias dloginweb='docker-login webserver'
+alias mount_ntfs=‘/usr/local/sbin/mount_ntfs
 
 #初回起動時にzgenをリセット。更新した場合は手動でzgen reset
 if [ ! `cat $HOME/.zgen/init.zsh | grep 'ZSH=/Users/yutaro/.zgen/sorin-ionescu/prezto-master'` ]; then
